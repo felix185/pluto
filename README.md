@@ -2,6 +2,7 @@
 
 started on: 4-10-2016
 
+Programming language: JAVA
 
 Contributors:
 - Alexander Schmalz
