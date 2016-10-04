@@ -1,8 +1,8 @@
 # pluto
 
 Contributors:
-- Alexandra Hauser
 - Alexander Schmalz
+- Alexandra Hauser
 - Dominik Hirt
 - Felix Riess
 - Felix Seidel
