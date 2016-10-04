@@ -1,6 +1,6 @@
 # pluto
 
-started on: 4-10-2016
+started on: 04-10-2016
 
 Programming language: Java
 
