@@ -1,4 +1,4 @@
-package dhbw.pluto.api;
+package dhbw.pluto.laundry;
 
 import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -26,6 +26,7 @@ public class LaundryAlert extends ScheduledThreadPoolExecutor {
 	private void setTime(String time) {
 		this.time.setHours(Integer.parseInt(time.substring(0, 2)));
 		this.time.setMinutes(Integer.parseInt(time.substring(3, 5)));
+		this.time.setSeconds(0);
 		System.out.println(this.time.toString());
 	}
 
