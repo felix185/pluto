@@ -23,3 +23,6 @@ The CSS framework is Semantic UI. The JS framework is React.
 - Dominik Hirt
 - Felix Riess
 - Felix Seidel
+
+## 3. Branching
+We use the 'develop' branch as our main branch for development. The master branch holds production-ready code.
