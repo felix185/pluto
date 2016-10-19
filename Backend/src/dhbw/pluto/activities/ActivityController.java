@@ -1,6 +1,13 @@
 package dhbw.pluto.activities;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ActivityController {
 
@@ -8,12 +15,11 @@ public class ActivityController {
 		
 	}
 	
-	public void writeActivity(Activity activity) throws ActivityCreationException
-	{
+	public static void writeActivity(Activity activity) throws ActivityCreationException {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
-			PreparedStatement statement = connection.prepareStatement("INSERT INTO activities (description, eMail, timestamp) VALUES (?, ?, ?)");
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO activities (description, eMail, timestamp) VALUES (?, ?, ?);");
 			statement.setString(1, activity.getActivity());
 			statement.setString(2, activity.getAuthor());
 			statement.setLong(3, activity.getTimestamp());
@@ -25,8 +31,26 @@ public class ActivityController {
 		}
 	}
 	
-	public Activity[] getActivities()
-	{
-		return null;
+
+	public static List<Activity> getActivities() throws ActivityLoadingException {
+		List<Activity> result = new ArrayList<>();
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+			Statement statement = connection.createStatement();
+			
+			ResultSet set = statement.executeQuery("SELECT * FROM activities;");
+			while(set.next()) {
+				Activity currentActivity = new Activity(set.getString("eMail"), set.getLong("timestamp"), set.getString("description"));
+				result.add(currentActivity);
+			}
+
+			set.close();
+			statement.close();
+			connection.close();
+		} catch (Exception e) {
+			throw new ActivityLoadingException("The activities could not be loaded from the database. Reason: " + e.getMessage());
+		}
+		return result;
 	}
 }
