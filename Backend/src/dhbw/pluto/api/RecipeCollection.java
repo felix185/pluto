@@ -65,6 +65,41 @@ public class RecipeCollection {
 		return Response.status(200).build();
 	}
 	
+	
+	@POST
+	@Path("/search")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchRecipe(@FormParam("ingredients") String ingredientsString) {
+		JSONArray recipes = new JSONArray();
+		try {
+				
+			JSONArray ingredients = new JSONArray(ingredientsString);
+			
+			List<Ingredient> ingre = new ArrayList<Ingredient>();
+			for(int i = 0; i < ingredients.length(); i++) {
+			
+				if (isIngredientValid(ingredients.getJSONObject(i))) {
+					Ingredient ingredient = new Ingredient(ingredients.getJSONObject(i).getString("name"), ingredients.getJSONObject(i).getString("amount"));
+					ingre.add(ingredient);
+				} else {
+					return Response.status(400).build();
+				}
+			}
+			
+			recipes = convertRecipes(RecipeController.searchRecipes(ingre));			
+			
+		} catch (JSONException e) {
+			System.out.println(e);
+			return Response.status(400).build();
+		} catch (RecipeLoadingException ex) {
+			System.out.println(ex);
+			return Response.status(400).build();
+		}
+		
+		return Response.status(200).entity(recipes.toString()).build();
+	}
+	
 	private boolean isIngredientValid(JSONObject ingredient) throws JSONException{
 		return !ingredient.getString("name").equals("") && !ingredient.getString("amount").equals("");
 	}
