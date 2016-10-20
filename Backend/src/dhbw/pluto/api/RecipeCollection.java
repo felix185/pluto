@@ -16,6 +16,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.pluto.activities.ActivityController;
+import dhbw.pluto.activities.ActivityCreationException;
+import dhbw.pluto.activities.RecipeCreationActivity;
 import dhbw.pluto.recipes.*;
 
 @Path("/meta")
@@ -42,6 +45,11 @@ public class RecipeCollection {
 			}
 			if (!newRcp.getString("title").equals("") && !newRcp.getString("text").equals("") && !newRcp.getString("eMail").equals("")) {
 				RecipeController.createRecipe(newRcp.getString("title"), newRcp.getString("text"), newRcp.getString("eMail"), ingre);
+				try {
+					ActivityController.writeActivity(new RecipeCreationActivity(newRcp.getString("eMail"), System.currentTimeMillis(), newRcp.getString("title")));
+				} catch(ActivityCreationException e) {
+					e.printStackTrace();
+				}
 			} else {
 				return Response.status(400).build();
 			}
