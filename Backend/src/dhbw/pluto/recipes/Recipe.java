@@ -45,6 +45,10 @@ public class Recipe {
 
 	    return result;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 }
 

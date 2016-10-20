@@ -11,6 +11,11 @@ public class Ingredient {
 	public Ingredient (String name, String amount) {
 		this.name = name;
 		this.amount = amount;
+		
+		if (name == null) {
+			System.out.println("Name ist null");
+		}
+		
 	}
 	
 	//generate valid JSON
@@ -26,6 +31,14 @@ public class Ingredient {
 		    }
 
 		    return result;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public String getAmount() {
+			return amount;
 		}
 
 }
