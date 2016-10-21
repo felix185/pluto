@@ -24,7 +24,9 @@ public class ActivityLog {
 			result = convertActivities(ActivityController.getActivities());
 		} catch(ActivityLoadingException e)
 		{
-			return Response.status(501).build();			
+
+			return Response.status(500).build();			
+
 		}
 		return Response.status(200).entity(result.toString()).build();
 	}
