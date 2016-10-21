@@ -3,8 +3,10 @@ package dhbw.pluto.api;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -47,10 +49,8 @@ public class RecipeCollection {
 			}
 			
 		} catch (JSONException e) {
-			System.out.println(e);
 			return Response.status(400).build();
 		} catch (RecipeCreationException ex) {
-			System.out.println(ex);
 			return Response.status(400).build();
 		}
 		
@@ -75,9 +75,6 @@ public class RecipeCollection {
 		return Response.status(200).entity(result.toString()).build(); 
 	}
 
-	//remove a recipe
-	
-	
 	private JSONArray convertRecipes(List<Recipe> recipes) {
 		JSONArray result = new JSONArray();
 		for (int i = 0; i < recipes.size(); i++) {
@@ -86,5 +83,22 @@ public class RecipeCollection {
 		return result;
 	}
 	
+	
+	//remove a recipe
+	@DELETE
+	@Path("/recipe/{id}")
+	public Response removeRecipe(@PathParam("id") int id) {
+		try {
+			if (id > 0) {
+				RecipeController.deleteRecipe(id);
+			} else {
+				return Response.status(400).build();
+			}
+		} catch(RecipeDeletionException e) {
+			return Response.status(500).build();
+		}
+		
+		return Response.status(200).build();
+	}
 	
 }
