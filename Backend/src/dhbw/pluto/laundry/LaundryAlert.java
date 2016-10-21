@@ -1,5 +1,6 @@
 package dhbw.pluto.laundry;
 
+import java.util.Calendar;
 import java.util.Properties;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -7,12 +8,14 @@ import java.util.concurrent.TimeUnit;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+
+
 public class LaundryAlert extends ScheduledThreadPoolExecutor {
 	
 	private String emailAdress;
-	private long time;
+	private String time;
 	
-	public LaundryAlert(String emailAdress, long timestamp){
+	public LaundryAlert(String emailAdress, String timestamp){
 		super(1);
 		this.time = timestamp;
 		this.emailAdress = emailAdress;
@@ -21,9 +24,18 @@ public class LaundryAlert extends ScheduledThreadPoolExecutor {
 	
 
 	public void initializeAlert(){
+		Calendar alertTime = Calendar.getInstance();
+		alertTime.set(Calendar.MINUTE, Integer.parseInt(time.substring(3,5)));
+		alertTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.substring(0,2)));
+		alertTime.set(Calendar.SECOND, 0);
+		alertTime.set(Calendar.MILLISECOND, 0);
+		System.out.println(alertTime.getTimeInMillis());
+		System.out.println(System.currentTimeMillis());
+		System.out.println(alertTime.getTimeInMillis() - System.currentTimeMillis());
 		
-		long duration = time - System.currentTimeMillis();
-		this.toString();
+		long duration = alertTime.getTimeInMillis() - System.currentTimeMillis();
+	
+		System.out.println(duration);
 		Runnable alert = new Runnable() {
 			
 			@Override
@@ -67,12 +79,12 @@ public class LaundryAlert extends ScheduledThreadPoolExecutor {
 	}
 
 
-	public long getTime() {
+	public String getTime() {
 		return time;
 	}
 
 
-	public void setTime(long time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 
