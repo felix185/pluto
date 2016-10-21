@@ -21,6 +21,7 @@ import java.util.List;
 import dhbw.pluto.activities.ActivityController;
 import dhbw.pluto.activities.ActivityCreationException;
 import dhbw.pluto.activities.RecipeCreationActivity;
+import dhbw.pluto.activities.RecipeDeletionActivity;
 import dhbw.pluto.activities.RecipeSearchActivity;
 import dhbw.pluto.recipes.*;
 
@@ -145,7 +146,11 @@ public class RecipeCollection {
 		} catch(RecipeDeletionException e) {
 			return Response.status(500).build();
 		}
-		
+		try {
+			ActivityController.writeActivity(new RecipeDeletionActivity(System.currentTimeMillis(), id));
+		} catch(ActivityCreationException e) {
+			e.printStackTrace();
+		}
 		return Response.status(200).build();
 	}
 	
