@@ -19,6 +19,7 @@ import java.util.List;
 import dhbw.pluto.activities.ActivityController;
 import dhbw.pluto.activities.ActivityCreationException;
 import dhbw.pluto.activities.RecipeCreationActivity;
+import dhbw.pluto.activities.RecipeSearchActivity;
 import dhbw.pluto.recipes.*;
 
 @Path("/meta")
@@ -74,8 +75,7 @@ public class RecipeCollection {
 		JSONArray recipes = new JSONArray();
 		try {
 				
-			JSONArray ingredients = new JSONArray(ingredientsString);
-			
+			JSONArray ingredients = new JSONArray(ingredientsString);			
 			List<Ingredient> ingre = new ArrayList<Ingredient>();
 			for(int i = 0; i < ingredients.length(); i++) {
 			
@@ -87,7 +87,12 @@ public class RecipeCollection {
 				}
 			}
 			
-			recipes = convertRecipes(RecipeController.searchRecipes(ingre));			
+			recipes = convertRecipes(RecipeController.searchRecipes(ingre));	
+			try {
+				ActivityController.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
+			} catch (ActivityCreationException e) {
+				e.printStackTrace();
+			}
 			
 		} catch (JSONException e) {
 			System.out.println(e);
