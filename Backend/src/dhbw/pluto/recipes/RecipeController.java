@@ -106,8 +106,8 @@ public class RecipeController {
 		     }
 		return recipes;
 	}
-	//delete
 	
+
 	
 	public static List<Recipe> searchRecipes(List<Ingredient> givenIngredients) throws RecipeLoadingException {
 		List<Recipe> recipes = new ArrayList<>();
@@ -176,4 +176,31 @@ public class RecipeController {
 		return baseQuery;
 	}
 	
+
+	//delete
+	public static void deleteRecipe(int id) throws RecipeDeletionException {
+		Connection connection = null;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+			connection.setAutoCommit(false);
+			
+			PreparedStatement recipeDelete = connection.prepareStatement("DELETE FROM Recipes WHERE id = ?;");
+			PreparedStatement relationDelete = connection.prepareStatement("DELETE FROM recipes_ingredients WHERE recipe_id = ?;");
+			recipeDelete.setInt(1, id);
+			relationDelete.setInt(1, id);
+			
+			recipeDelete.execute();
+			relationDelete.execute();
+			
+			connection.commit();
+			recipeDelete.close();
+			relationDelete.close();
+			connection.close();
+		} catch (Exception e) {
+			throw new RecipeDeletionException("The recipe could not be deleted. Reason: " + e.getMessage());
+		}
+	}
+
 }
