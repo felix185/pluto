@@ -1,0 +1,374 @@
+html {
+  height: 100%;
+}
+
+body {
+  position: static;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+ol > li > a {
+  color: #00A982;
+}
+
+textarea {
+  resize: none !important;
+}
+
+* {
+  border-radius: 0 !important;
+}
+
+.panel {
+  word-wrap: break-word!important;
+}
+
+/*Main*/
+#mainMenu {
+  z-index: 99;
+}
+
+/*ThingTypes*/
+#thingTypeList > .panel {
+  position: fixed;
+  width: 17%;
+  top: 4%;
+  left: 5%;
+  height: 92%;
+  overflow-y: auto;
+}
+
+.thingTypeEditAnchor {
+  position: absolute;
+  right: 5px;
+  margin-top: -35px;
+}
+
+.thingTypeListItem {
+  height: 75px;
+}
+
+#thingTypePanel > .panel {
+  position: fixed;
+  top: 4%;
+  left: 23%;
+  width: 72%;
+  height: 92%;
+}
+
+#thingTypeCheckBoxes {
+  position: relative;
+  top: 50%;
+  right: 5.3%;
+  z-index: 99;
+}
+
+#thingTypeShowAllButton {
+  margin-left: 24%;
+  margin-right: 20%;
+  margin-bottom: 5%;
+}
+
+#thingTypeRelationshipTypesCheckBoxes {
+  float: right;
+  font-size: small;
+  margin-left: 20%;
+}
+
+#thingTypeResourcesIcon {
+  position: relative;
+  float: right;
+  left: 20px;
+  top: 20px;
+  z-index: 10;
+}
+
+.popover.left > .arrow {
+  top: 25px !important;
+}
+
+.popover.bottom-right .arrow:after {
+  top: 1px;
+  margin-left: -10px;
+}
+
+.popover.left {
+  position: relative;
+  top: 25px !important;
+}
+
+/*ThingTypeCreation*/
+#thingTypeCreationBreadcrumbContainer {
+  position: fixed;
+  left: 25%;
+  width: 50%;
+  font-size: x-large;
+  text-align: center;
+}
+
+#thingTypeCreationBreadcrumb {
+  background-color: transparent;
+}
+
+.thingTypeCreationBreadcrumbButton {
+  color: #00A982;
+  font-size: larger;
+}
+
+.thingTypeCreationBreadcrumbButtonActive {
+  color: #7d7d7d;
+  font-size: larger;
+}
+
+#thingTypeCreationSaveBasicPropertiesButton {
+  margin-top: 5px;
+  float: right;
+}
+
+#steps {
+  position: fixed;
+  left: 5%;
+  top: 170px;
+  height: 80%;
+  width: 80%;
+}
+
+.grommetux-columns {
+  margin-left: 8%;
+  width: inherit;
+}
+
+.grommetux-columns__column {
+  margin-left: 20px;
+}
+
+/*BasicsStep*/
+#basicsStep {
+  position: relative;
+  text-align: left;
+  float: left;
+  width: 300px;
+}
+
+#basicStepSaveButton {
+  float: right;
+  margin-top: 5px;
+}
+
+/*InheritanceStep*/
+#inheritanceStep {
+  position: relative;
+  font-size: 14px;
+  float: left;
+  text-align: left;
+  margin-bottom: 1000px;
+  width: 300px;
+  height: inherit;
+}
+
+#inheritanceStepParentDropDownButton {
+  width: 300px;
+  text-align: right;
+  background-color: white;
+  border-color: #dddddd;
+}
+
+#inheritanceStepPanelElements > .panel {
+  position: fixed;
+  top: 250px;
+  bottom: 5px;
+  margin-top: 5px;
+  width: 300px;
+  overflow-y: auto;
+}
+
+.inheritanceStepPanelElement {
+  height: 50px;
+  margin: 5px;
+  text-align: center;
+}
+
+#inheritanceStepSidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 92%;
+  width: 15%;
+  text-align: center;
+}
+
+#inheritanceStepSidebarMenu {
+  width: 90%;
+  margin: 10px;
+}
+
+.inheritanceStepSidebarPanel {
+  margin: 0;
+}
+
+#inheritanceStepPanelElementRemoveIcon {
+  color: #7d7d7d;
+  position: relative;
+  float: right;
+}
+
+/*AttributesStep*/
+#attributesStep {
+  position: relative;
+  text-align: left;
+  float: left;
+  left: 10%;
+  width: 90%;
+}
+
+#attributesStepAddIcon {
+  position: fixed;
+  float: left;
+  top: 100px;
+  left: 5%;
+}
+
+#attributesStepRemoveIcon {
+  position: absolute;
+  left: -125px;
+}
+
+#attributesStepEditIcon {
+  position: absolute;
+  left: -50px;
+}
+
+.attributesStepAttributePanel {
+  position: relative;
+  min-height: 50px;
+  width: 120px;
+  text-align: center;
+  margin-bottom: 30px;
+  z-index: 10;
+}
+
+#attributeStepHandlerConfig {
+  position: absolute;
+  width: 100%;
+}
+
+/*HandlerStep*/
+#handlerStep {
+  position: relative;
+  text-align: left;
+  float: left;
+  font-size: 14px;
+  width: 100%;
+}
+
+.handlerStepHandlerAnchor {
+  position: relative;
+  top: -60px;
+  left: 90px;
+  height: 50px;
+  width: 50px;
+  margin-bottom: 30px;
+}
+
+#handlerStepPanelElements {
+  position: absolute;
+  top: -65px;
+  left: 140px;
+  height: 50px;
+  margin-left: 5px;
+  width: 88%;
+}
+
+.handlerStepPanelElement {
+  position: relative;
+  float: left;
+  height: 50px;
+  min-width: 100px;
+  margin: 5px;
+  text-align: center;
+}
+
+#handlerStepBasicsSidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 92%;
+  width: 15%;
+  text-align: center;
+}
+
+#handlerStepBasicsSidebarMenu {
+  width: 90%;
+  margin: 10px;
+}
+
+.handlerStepBasicsSidebarMenuTitle {
+  align-self: center;
+  font-size: 18px;
+}
+
+.handlerStepBasicsSidebarPanel {
+  margin: 0;
+}
+
+#handlerStepChain {
+  float: left;
+}
+
+#handlerStepPanelElementRemoveIcon {
+  color: #7d7d7d;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#handlerStepPanelElementEditIcon {
+  color: #7d7d7d;
+  position: absolute;
+  top: 30px;
+  right: 0;
+}
+
+/*PropertyStep*/
+#propertyStepForm > form {
+  width: 100%;
+}
+
+#propertyStepButtons > form {
+  float: right;
+  width: 100%;
+}
+
+#propertyStepName > form {
+  width: 100%;
+}
+
+#propertyStepCancelButton {
+  float: right;
+  margin-right: 5px;
+}
+
+#propertyStepSaveButton {
+  float: right;
+  margin-right: 5px;
+}
+
+.handlerConfigurationPanel {
+  position: relative;
+  min-height: 50px;
+  width: 120px;
+  text-align: center;
+  margin-bottom: 30px;
+  z-index: 10;
+}
+
+.persistenceHandlerConfig {
+  position: absolute;
+  width: 100%;
+}
+
+.grommetux-check-box__control-check {
+  left: 0 !important;
+}
