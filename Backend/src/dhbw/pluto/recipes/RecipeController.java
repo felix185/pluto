@@ -17,7 +17,7 @@ public class RecipeController {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:C:/Users/rieb/Documents/Semester 5/Software Engineering/pluto/Backend/src/dhbw/pluto/recipes/recipecollection.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
 			connection.setAutoCommit(false);
 			
 			statement = connection.prepareStatement("INSERT INTO Recipes (title, author, text) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
@@ -73,7 +73,7 @@ public class RecipeController {
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
-		      connection = DriverManager.getConnection("jdbc:sqlite:C:/Users/rieb/Documents/Semester 5/Software Engineering/pluto/Backend/src/dhbw/pluto/recipes/recipecollection.db");
+		      connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
 		      connection.setAutoCommit(false);
 
 		      statement = connection.createStatement();
@@ -106,6 +106,30 @@ public class RecipeController {
 		     }
 		return recipes;
 	}
-	//delete
 	
+	//delete
+	public static void deleteRecipe(int id) throws RecipeDeletionException {
+		Connection connection = null;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+			connection.setAutoCommit(false);
+			
+			PreparedStatement recipeDelete = connection.prepareStatement("DELETE FROM Recipes WHERE id = ?;");
+			PreparedStatement relationDelete = connection.prepareStatement("DELETE FROM recipes_ingredients WHERE recipe_id = ?;");
+			recipeDelete.setInt(1, id);
+			relationDelete.setInt(1, id);
+			
+			recipeDelete.execute();
+			relationDelete.execute();
+			
+			connection.commit();
+			recipeDelete.close();
+			relationDelete.close();
+			connection.close();
+		} catch (Exception e) {
+			throw new RecipeDeletionException("The recipe could not be deleted. Reason: " + e.getMessage());
+		}
+	}
 }
