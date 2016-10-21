@@ -1,41 +1,29 @@
 package dhbw.pluto.laundry;
 
-import java.util.*;
+import java.util.Properties;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javax.mail.*;
 import javax.mail.internet.*;
 
-
 public class LaundryAlert extends ScheduledThreadPoolExecutor {
 	
 	private String emailAdress;
-	private Date time;
+	private long time;
 	
-	public LaundryAlert(String emailAdress, String time){
+	public LaundryAlert(String emailAdress, long timestamp){
 		super(1);
-		this.time = new Date();
-		setTime(time);
+		this.time = timestamp;
 		this.emailAdress = emailAdress;
 		
-		
-
 	}
 	
-	private void setTime(String time) {
-		this.time.setHours(Integer.parseInt(time.substring(0, 2)));
-		this.time.setMinutes(Integer.parseInt(time.substring(3, 5)));
-		this.time.setSeconds(0);
-		System.out.println(this.time.toString());
-	}
 
 	public void initializeAlert(){
 		
-		Date now = new Date();
-		System.out.println(now.toString());
-		long duration = (this.time.getTime()-now.getTime())/1000;
-		System.out.println(duration);
+		long duration = time - System.currentTimeMillis();
+		this.toString();
 		Runnable alert = new Runnable() {
 			
 			@Override
@@ -64,7 +52,34 @@ public class LaundryAlert extends ScheduledThreadPoolExecutor {
 				}
 			}
 		};
-		this.schedule(alert, duration, TimeUnit.SECONDS);
+		this.schedule(alert, duration, TimeUnit.MILLISECONDS);
+		System.out.println("Alarm wurde erstellt");
+	}
+
+
+	public String getEmailAdress() {
+		return emailAdress;
+	}
+
+
+	public void setEmailAdress(String emailAdress) {
+		this.emailAdress = emailAdress;
+	}
+
+
+	public long getTime() {
+		return time;
+	}
+
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+
+	@Override
+	public String toString() {
+		return "LaundryAlert [emailAdress=" + emailAdress + ", time=" + time + "]";
 	}
 	
 
