@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 import { Router, Route, hashHistory } from 'react-router'
-import {MainPage} from './MainPage'
+import MainPage from './MainPage'
 import {LaundryAlert} from './laundry/LaundryAlert'
 
 
