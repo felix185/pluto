@@ -18,6 +18,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.pluto.activities.ActivityController;
+import dhbw.pluto.activities.ActivityCreationException;
+import dhbw.pluto.activities.RecipeCreationActivity;
+import dhbw.pluto.activities.RecipeDeletionActivity;
+import dhbw.pluto.activities.RecipeSearchActivity;
 import dhbw.pluto.recipes.*;
 
 @Path("/meta")
@@ -44,6 +49,11 @@ public class RecipeCollection {
 			}
 			if (!newRcp.getString("title").equals("") && !newRcp.getString("text").equals("") && !newRcp.getString("eMail").equals("")) {
 				RecipeController.createRecipe(newRcp.getString("title"), newRcp.getString("text"), newRcp.getString("eMail"), ingre);
+				try {
+					ActivityController.writeActivity(new RecipeCreationActivity(newRcp.getString("eMail"), System.currentTimeMillis(), newRcp.getString("title")));
+				} catch(ActivityCreationException e) {
+					e.printStackTrace();
+				}
 			} else {
 				return Response.status(400).build();
 			}
@@ -55,6 +65,45 @@ public class RecipeCollection {
 		}
 		
 		return Response.status(200).build();
+	}
+	
+	
+	@POST
+	@Path("/search")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchRecipe(@FormParam("ingredients") String ingredientsString) {
+		JSONArray recipes = new JSONArray();
+		try {
+				
+			JSONArray ingredients = new JSONArray(ingredientsString);			
+			List<Ingredient> ingre = new ArrayList<Ingredient>();
+			for(int i = 0; i < ingredients.length(); i++) {
+			
+				if (isIngredientValid(ingredients.getJSONObject(i))) {
+					Ingredient ingredient = new Ingredient(ingredients.getJSONObject(i).getString("name"), ingredients.getJSONObject(i).getString("amount"));
+					ingre.add(ingredient);
+				} else {
+					return Response.status(400).build();
+				}
+			}
+			
+			recipes = convertRecipes(RecipeController.searchRecipes(ingre));	
+			try {
+				ActivityController.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
+			} catch (ActivityCreationException e) {
+				e.printStackTrace();
+			}
+			
+		} catch (JSONException e) {
+			System.out.println(e);
+			return Response.status(400).build();
+		} catch (RecipeLoadingException ex) {
+			System.out.println(ex);
+			return Response.status(400).build();
+		}
+		
+		return Response.status(200).entity(recipes.toString()).build();
 	}
 	
 	private boolean isIngredientValid(JSONObject ingredient) throws JSONException{
@@ -97,7 +146,11 @@ public class RecipeCollection {
 		} catch(RecipeDeletionException e) {
 			return Response.status(500).build();
 		}
-		
+		try {
+			ActivityController.writeActivity(new RecipeDeletionActivity(System.currentTimeMillis(), id));
+		} catch(ActivityCreationException e) {
+			e.printStackTrace();
+		}
 		return Response.status(200).build();
 	}
 	

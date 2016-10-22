@@ -107,6 +107,76 @@ public class RecipeController {
 		return recipes;
 	}
 	
+
+	
+	public static List<Recipe> searchRecipes(List<Ingredient> givenIngredients) throws RecipeLoadingException {
+		List<Recipe> recipes = new ArrayList<>();
+		List<Ingredient> ingredients = new ArrayList<>();
+		
+		try {
+		      Class.forName("org.sqlite.JDBC");
+		      Connection connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+		      connection.setAutoCommit(false);
+
+		      PreparedStatement statement = connection.prepareStatement(buildSearchQuery(givenIngredients.size()));
+		      int j = 1;
+		      for(Ingredient currentIngredient : givenIngredients) {
+		    	  statement.setString(j++, currentIngredient.getName());
+		      }
+		      
+		      ResultSet rs = statement.executeQuery();
+		      while ( rs.next() ) {
+		    	  int id = rs.getInt("id");
+		          String  title = rs.getString("title");
+		          String author  = rs.getString("author");
+		          String  text = rs.getString("text");
+		          
+		          String[] ingredient = rs.getString("ingredients").split(";");
+		          for (int i = 0; i < ingredient.length; i++) {
+		        	  String[] currIngr = ingredient[i].split(",");
+		        	  String name = currIngr[0];
+		        	  String amount = currIngr[1];
+		        	  
+		        	  Ingredient currentIngredient = new Ingredient(name, amount);
+		        	  ingredients.add(currentIngredient);
+		          }
+		          
+		          Recipe currentRecipe = new Recipe(id, title, author, text, ingredients);
+		          ingredients = new ArrayList<>();
+		          recipes.add(currentRecipe);
+		       }
+		       rs.close();
+		       statement.close();
+		       connection.close();
+		     } catch ( Exception e ) {
+		    	 throw new RecipeLoadingException("The recipes could not be loaded from the database. Reason: " + e.getMessage());
+		     }
+		
+		return recipes;
+	}
+	
+	private static String buildSearchQuery(int countIngredients) {
+		String baseQuery = "SELECT * FROM RecipeView " +
+							"WHERE NOT EXISTS " +
+							"( "+
+							"SELECT * FROM recipes_ingredients LEFT JOIN " +
+							"( " +
+							"SELECT name AS ingredientName, id AS ingredientId FROM Ingredients " +
+							"WHERE name IN (?";
+		
+		for(int i = 1; i < countIngredients; i++) {
+			baseQuery += ",?";
+		}
+		
+		baseQuery += ") "+
+						") " +  
+						"ON ingredientId = recipes_ingredients.ingredient_id " + 
+						"WHERE ingredientName IS NULL AND RecipeView.id = recipes_ingredients.recipe_id " + 
+						");";
+		return baseQuery;
+	}
+	
+
 	//delete
 	public static void deleteRecipe(int id) throws RecipeDeletionException {
 		Connection connection = null;
@@ -132,4 +202,5 @@ public class RecipeController {
 			throw new RecipeDeletionException("The recipe could not be deleted. Reason: " + e.getMessage());
 		}
 	}
+
 }
