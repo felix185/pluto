@@ -28,6 +28,7 @@ export default class MainPage extends Component {
               <h1>Hauptmenü</h1>
               <ul>
                   <li><Link to="/laundry/alert" >Wäschealarm erstellen</Link></li>
+                  <li><Link to="/recipes">Rezepte anzeigen</Link></li>
               </ul>
           </div>
           <div>
