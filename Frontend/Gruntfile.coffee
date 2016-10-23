@@ -1,7 +1,7 @@
 module.exports = (grunt) ->
 
   # Initial definitions for folders
-  OUTPUT_FOLDER = "./out"
+  OUTPUT_FOLDER = "C:/Users/rieb/Downloads/apache-tomcat-8.5.5-windows-x64/apache-tomcat-8.5.5/webapps/ROOT"
 
   grunt.initConfig
 
@@ -32,6 +32,8 @@ module.exports = (grunt) ->
     clean:
       browserify: ['./build/tmp/compileBrowserify']
       out: [OUTPUT_FOLDER]
+      options:
+        force: true
 
     browserify:
       code:
@@ -48,7 +50,7 @@ module.exports = (grunt) ->
               }
             ]
           ]
-        dest: 'out/js/training.js'
+        dest: "#{OUTPUT_FOLDER}/js/training.js"
         src: ['src/main/**/*.js']
       watch:
         options:
@@ -68,7 +70,7 @@ module.exports = (grunt) ->
           watchifyOptions:
             poll: true
           keepAlive: true
-        dest: 'out/js/training.js'
+        dest: "#{OUTPUT_FOLDER}/js/training.js"
         src: ['src/main/**/*.js']
 
 
