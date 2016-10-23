@@ -11,7 +11,6 @@ import ShowRecipes from './recipes/ShowRecipes'
 import CreateRecipe from './recipes/CreateRecipe'
 import SearchRecipe from './recipes/Search'
 
-
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={MainPage}/>

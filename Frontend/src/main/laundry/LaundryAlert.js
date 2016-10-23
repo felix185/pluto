@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-export default class CreateRecipe extends Component {
+export default class LaundryAlert extends Component {
   constructor(props) {
     super(props);
     this.state = {recipes: []};
