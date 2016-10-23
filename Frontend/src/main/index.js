@@ -5,7 +5,7 @@ import React from 'react';
 
 import { Router, Route, hashHistory } from 'react-router'
 import MainPage from './MainPage'
-import {LaundryAlert} from './laundry/LaundryAlert'
+import LaundryAlert from './laundry/LaundryAlert'
 import LaundryIcons from './laundry/Icons'
 import ShowRecipes from './recipes/ShowRecipes'
 import CreateRecipe from './recipes/CreateRecipe'

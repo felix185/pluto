@@ -47,7 +47,8 @@ export default class LaundryIcons extends Component {
 
     return (
       <div>
-          <div className="ui grid container">
+        <div className="ui grid container">
+          <div className="sixteen wide column">
             <div className="row">
                 <h1>Hauptmenü</h1>
                 <ul>
@@ -60,13 +61,14 @@ export default class LaundryIcons extends Component {
                 </ul>
             </div>
             <div className="row">
-              <center><h1>Icons</h1></center>
-            </div>
+              <h1>Icons</h1>
+            <center>
             <div className="ui text container segment input">
               <input type="text" placeholder="Suche" value={this.state.search} onChange={(event) => this.handleSearchChange(event)}/>
               <button className="ui button" onClick={() => this.handleSearchClick()}>Suche</button>
               <button className="ui button" onClick={() => this.resetSearch()}>Zurücksetzen</button>
             </div>
+            </center>
               {this.state.searchResults.map(function(icon) {
                 return (
                   <div className="ui text container segment">
@@ -75,7 +77,8 @@ export default class LaundryIcons extends Component {
                   </div>
                 );
               })}
-
+			  </div>
+              </div>
           </div>
       </div>
 

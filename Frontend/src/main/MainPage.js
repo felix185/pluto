@@ -25,6 +25,7 @@ export default class MainPage extends Component {
     return (
       <div>
           <div className="ui grid container">
+          <div className="sixteen wide column">
             <div className="row">
                 <h1>Hauptmenü</h1>
                 <ul>
@@ -36,7 +37,7 @@ export default class MainPage extends Component {
               	</ul>
             </div>
             <div className="row">
-              <center><h1>Aktivitäten</h1></center>
+              <h1>Aktivitäten</h1>
             </div>
               {this.state.activities.map(function(activity) {
                 return (
@@ -45,7 +46,7 @@ export default class MainPage extends Component {
                   </div>
                 );
               })}
-
+              </div>
           </div>
       </div>
 
