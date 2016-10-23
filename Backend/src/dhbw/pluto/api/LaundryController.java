@@ -14,6 +14,10 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
+import dhbw.pluto.activities.ActivityController;
+import dhbw.pluto.activities.ActivityCreationException;
+import dhbw.pluto.activities.LaundryReminderCreationActivity;
+import dhbw.pluto.activities.RecipeCreationActivity;
 import dhbw.pluto.laundry.IconLoadingException;
 import dhbw.pluto.laundry.LaundryAlert;
 import dhbw.pluto.laundry.LaundryIcon;
@@ -37,7 +41,11 @@ public class LaundryController {
 		
 		LaundryAlert alert = new LaundryAlert(email, time);
 		alert.initializeAlert();
-	
+		try {
+			ActivityController.writeActivity(new LaundryReminderCreationActivity(System.currentTimeMillis(), email, time));
+		} catch (ActivityCreationException e) {
+			e.printStackTrace();
+		}
 		return Response.status(200).entity(alert.toString()).build();
 
 	}
