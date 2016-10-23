@@ -32,7 +32,7 @@ export default class ShowRecipes extends Component {
                     <li><Link to="/laundry/icons" >Wäscheinfo anzeigen</Link></li>
                     <li><Link to="/recipes">Rezepte anzeigen</Link></li>
                     <li><Link to="/recipes/create">Rezept erstellen</Link></li>
-                    <li><Link to="/recipes/show">Rezept suchen</Link></li>
+                    <li><Link to="/recipes/search">Rezept suchen</Link></li>
                 </ul>
             </div>
             <div className="row">
