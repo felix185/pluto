@@ -1,6 +1,6 @@
 var CreateJSON = {
   createJSON() {
-    var text = document.getElementById('text').value;
+    var text = document.getElementById('text').value.replace(/\n/g, "");
     var title = document.getElementById('title').value;
     var eMail = document.getElementById('mail').value;
     var ingredient_name = document.getElementsByName('ingredient_name');
