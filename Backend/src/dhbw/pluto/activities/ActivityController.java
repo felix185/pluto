@@ -51,6 +51,7 @@ public class ActivityController {
 		} catch (Exception e) {
 			throw new ActivityLoadingException("The activities could not be loaded from the database. Reason: " + e.getMessage());
 		}
+		result.sort(null);
 		return result;
 	}
 }
