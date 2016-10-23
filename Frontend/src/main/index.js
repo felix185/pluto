@@ -9,6 +9,12 @@ import LaundryAlert from './laundry/LaundryAlert'
 import LaundryIcons from './laundry/Icons'
 import ShowRecipes from './recipes/ShowRecipes'
 import CreateRecipe from './recipes/CreateRecipe'
+import {LaundryAlert} from './laundry/LaundryAlert'
+import LaundryIcons from './laundry/Icons'
+import ShowRecipes from './recipes/ShowRecipes'
+import CreateRecipe from './recipes/CreateRecipe'
+import SearchRecipe from './recipes/Search'
+
 
 ReactDOM.render(
     <Router history={hashHistory}>
@@ -17,5 +23,6 @@ ReactDOM.render(
         <Route path="/laundry/icons" component={LaundryIcons} />
         <Route path="/recipes" component={ShowRecipes} />
         <Route path="/recipes/create" component={CreateRecipe} />
+        <Route path="/recipes/search" component={SearchRecipe} />
     </Router>,
     document.getElementById('app'));
