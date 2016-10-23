@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * @author Felix Seidel
  *
  */
-public class Activity {
+public class Activity implements Comparable {
 	
 	protected String author;
 	protected String message;
@@ -69,5 +69,11 @@ public class Activity {
 	
 	public long getTimestamp() {
 		return timestamp;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		Activity a = (Activity) o;
+		return Long.compare(a.getTimestamp(), this.timestamp);
 	}
 }

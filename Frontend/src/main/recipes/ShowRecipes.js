@@ -25,6 +25,17 @@ export default class ShowRecipes extends Component {
         <div className="ui grid container">
           <div className="sixteen wide column">
             <div className="row">
+                <h1>Hauptmenü</h1>
+                <ul>
+                    <li><Link to="/">Startseite</Link></li>
+                    <li><Link to="/laundry/alert" >Wäschealarm erstellen</Link></li>
+                    <li><Link to="/laundry/icons" >Wäscheinfo anzeigen</Link></li>
+                    <li><Link to="/recipes">Rezepte anzeigen</Link></li>
+                    <li><Link to="/recipes/create">Rezept erstellen</Link></li>
+                    <li><Link to="/recipes/show">Rezept suchen</Link></li>
+                </ul>
+            </div>
+            <div className="row">
               <h1>Rezepte</h1>
               {this.state.recipes.map(function(recipe) {
                 return (
