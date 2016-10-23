@@ -11,6 +11,7 @@ public class Recipe {
 	private String author;
 	private String text;
 	List<Ingredient> ingredients;
+	private int score = 100;
 	
 	/*
 	 * Constructor
@@ -33,6 +34,7 @@ public class Recipe {
 	        result.put("title", title);
 	        result.put("text", text);
 	        result.put("eMail", author);
+	        result.put("score", score);
 	        JSONArray ingredientsArray = new JSONArray();
 	        for(int i = 0; i < ingredients.size(); i++) {
 	        	ingredientsArray.put(ingredients.get(i).toJSON());
@@ -48,6 +50,10 @@ public class Recipe {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 }
