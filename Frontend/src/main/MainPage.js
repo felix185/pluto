@@ -24,23 +24,27 @@ export default class MainPage extends Component {
 
     return (
       <div>
-          <div>
-              <h1>Hauptmenü</h1>
-              <ul>
-                  <li><Link to="/laundry/alert" >Wäschealarm erstellen</Link></li>
-                  <li><Link to="/recipes">Rezepte anzeigen</Link></li>
-                  <li><Link to="/recipes/create">Rezept erstellen</Link></li>
-              </ul>
-          </div>
-          <div>
-            <h1>Aktivitaeten</h1>
-            {this.state.activities.map(function(activity) {
-              return (
-                <div>
-                  {activity.eMail} {activity.activity}
-                </div>
-              );
-            })}
+          <div className="ui grid container">
+            <div className="row">
+                <h1>Hauptmenü</h1>
+                <ul>
+                    <li><Link to="/laundry/alert" >Wäschealarm erstellen</Link></li>
+                    <li><Link to="/laundry/icons" >Wäscheinfo anzeigen</Link></li>
+                  	<li><Link to="/recipes">Rezepte anzeigen</Link></li>
+                  	<li><Link to="/recipes/create">Rezept erstellen</Link></li>
+              	</ul>
+            </div>
+            <div className="row">
+              <center><h1>Aktivitäten</h1></center>
+            </div>
+              {this.state.activities.map(function(activity) {
+                return (
+                  <div className="ui text container segment">
+                    <b>{activity.eMail}</b> {activity.activity}
+                  </div>
+                );
+              })}
+
           </div>
       </div>
 
