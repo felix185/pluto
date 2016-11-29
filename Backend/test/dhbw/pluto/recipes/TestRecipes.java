@@ -24,6 +24,14 @@ public class TestRecipes {
 	}
 	
 	@Test
+	public void testLaundryAlertInvalidParameters() {
+		String email = "amx";
+		String time = "11:00";
+		Response response = laundryController.createAlert(email, time);
+		assertEquals(400, response.getStatus());
+	}
+	
+	@Test
 	public void testCreateRecipeValidParameters() {
 		String validRecipe = "{\"text\": \"Wasser kochen, Brühwürfel darin auflösen, Nudeln dazu geben\",\"title\": \"Nudelsuppe\",\"eMail\": \"test@web.de\",\"ingredients\": [ {\"name\": \"Nudeln\", \"amount\": \"200\"}, {\"name\": \"Wasser\", \"amount\": \"3\"}, {\"name\": \"Brühwürfel\", \"amount\": \"1\"} ]}";
 		Response response = recipeCollection.createRecipe(validRecipe);
@@ -32,34 +40,49 @@ public class TestRecipes {
 	
 	@Test
 	public void testCreateRecipeInvalidParameters() {
-		String invalidRecipe = "";
+		String invalidRecipe = "{\"text\": \"Wasser kochen, Brühwürfel darin auflösen, Nudeln dazu geben\",\"eMail\": \"test@web.de\",\"ingredients\": [ {\"name\": \"Nudeln\", \"amount\": \"200\"}, {\"name\": \"Wasser\", \"amount\": \"3\"}, {\"name\": \"Brühwürfel\", \"amount\": \"1\"} ]}";
 		Response response = recipeCollection.createRecipe(invalidRecipe);
 		assertEquals(400, response.getStatus());
 	}
 
 	@Test
-	public void testShowRecipes() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testSearchRecipesValidParameters() {
-		fail("Not yet implemented");
+		String validSearchParameter = "[{\"name\":\"Wasser\", \"amount\":\"3\"}, {\"name\":\"Brühwürfel\", \"amount\":\"1\"}, {\"name\":\"Nudeln\", \"amount\":\"200\"}]";
+		Response response = recipeCollection.searchRecipe(validSearchParameter);
+		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testSearchRecipesInvalidParameters() {
-		fail("Not yet implemented");
+		String invalidSearchParameter = "[{\"name\" : \"Wasser\", \"amount\" : \"\"}, {\"name\" : \"Brühwürfel\", \"amount\" : \"1\"}, {\"name\" : \"Nudeln\", \"amount\" : \"200\"}]";
+		Response response = recipeCollection.searchRecipe(invalidSearchParameter);
+		assertEquals(400, response.getStatus());
 	}
 
 	@Test
 	public void testDeleteRecipeValidParameters() {
-		fail("Not yet implemented");
+		int validParameter = 1;
+		Response response = recipeCollection.removeRecipe(validParameter);
+		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testDeleteRecipeInvalidParameters() {
-		fail("Not yet implemented");
+		int invalidParameter = 0;
+		Response response = recipeCollection.removeRecipe(invalidParameter);
+		assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void testListRecipes() {
+		Response response = recipeCollection.listRecipes();
+		assertEquals(200, response.getStatus());
+	}
+	
+	@Test
+	public void testListIcons() {
+		Response response = laundryController.listIcons();
+		assertEquals(200, response.getStatus());
 	}
 
 }
