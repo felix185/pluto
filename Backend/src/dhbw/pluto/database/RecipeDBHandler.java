@@ -29,7 +29,7 @@ public class RecipeDBHandler {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 			connection.setAutoCommit(false);
 			
-			statement = connection.prepareStatement("INSERT INTO " + Tables.RECIPES + " (title, author, text) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement("INSERT INTO " + Tables.RECIPES + " (" + Fields.TITLE + ", " + Fields.AUTHOR + ", " + Fields.TEXT + ") VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, title);
 			statement.setString(2,  author);
 			statement.setString(3, text);
@@ -41,7 +41,7 @@ public class RecipeDBHandler {
 				throw new SQLException("Creating recipe failed, no ID obtained");
 			}
 			PreparedStatement ingredientCheck = connection.prepareStatement("INSERT INTO " + Tables.INGREDIENTS + " (name) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM "+ Tables.INGREDIENTS +" WHERE name = ?);");
-			PreparedStatement ingredientMatch = connection.prepareStatement("INSERT INTO " + Tables.RECIPE_INGREDIENTS + " (recipe_id, ingredient_id, amount) SELECT ?, id, ? FROM " + Tables.INGREDIENTS + " WHERE name = ?;");
+			PreparedStatement ingredientMatch = connection.prepareStatement("INSERT INTO " + Tables.RECIPE_INGREDIENTS + " (" + Fields.RECIPE_ID + ", " + Fields.INGREDIENT_ID + ", " + Fields.AMOUNT + ") SELECT ?, id, ? FROM " + Tables.INGREDIENTS + " WHERE name = ?;");
 			
 			for(Ingredient currentIngredient : ingredients) {
 				ingredientCheck.setString(1, currentIngredient.getName());
@@ -130,11 +130,11 @@ public class RecipeDBHandler {
 	
 	private static Recipe createRecipeFromResultSet(ResultSet rs) throws SQLException {
 		IngredientCollection ingredients = new IngredientCollection();
-		int id = rs.getInt("id");
-        String  title = rs.getString("title");
-        String author  = rs.getString("author");
-        String text = rs.getString("text");		          
-        String ingredient = rs.getString("ingredients");        
+		int id = rs.getInt(Fields.ID);
+        String  title = rs.getString(Fields.TITLE);
+        String author  = rs.getString(Fields.AUTHOR);
+        String text = rs.getString(Fields.TEXT);		          
+        String ingredient = rs.getString(Fields.INGREDIENTS);        
         
         ingredients.fillFromString(ingredient);
         
@@ -147,8 +147,8 @@ public class RecipeDBHandler {
 							"( "+
 							"SELECT * FROM " + Tables.RECIPE_INGREDIENTS + " LEFT JOIN " +
 							"( " +
-							"SELECT name AS ingredientName, id AS ingredientId FROM " + Tables.INGREDIENTS + " " +
-							"WHERE name IN (?";
+							"SELECT " + Fields.NAME + " AS ingredientName, " + Fields.ID + " AS ingredientId FROM " + Tables.INGREDIENTS + " " +
+							"WHERE " + Fields.NAME + " IN (?";
 		
 		for(int i = 1; i < countIngredients; i++) {
 			baseQuery += ",?";
@@ -156,8 +156,8 @@ public class RecipeDBHandler {
 		
 		baseQuery += ") "+
 						") " +  
-						"ON ingredientId = " + Tables.INGREDIENTS + ".ingredient_id " + 
-						"WHERE ingredientName IS NULL AND " + Tables.RECIPE_VIEW + ".id = " + Tables.RECIPE_INGREDIENTS + ".recipe_id " + 
+						"ON ingredientId = " + Tables.RECIPE_INGREDIENTS + "." + Fields.INGREDIENT_ID + " " + 
+						"WHERE ingredientName IS NULL AND " + Tables.RECIPE_VIEW + ".id = " + Tables.RECIPE_INGREDIENTS + "." + Fields.RECIPE_ID + " " + 
 						");";
 		return baseQuery;
 	}
@@ -172,8 +172,8 @@ public class RecipeDBHandler {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 			connection.setAutoCommit(false);
 			
-			PreparedStatement recipeDelete = connection.prepareStatement("DELETE FROM " + Tables.RECIPES + " WHERE id = ?;");
-			PreparedStatement relationDelete = connection.prepareStatement("DELETE FROM " + Tables.RECIPE_INGREDIENTS + " WHERE recipe_id = ?;");
+			PreparedStatement recipeDelete = connection.prepareStatement("DELETE FROM " + Tables.RECIPES + " WHERE " + Fields.ID + " = ?;");
+			PreparedStatement relationDelete = connection.prepareStatement("DELETE FROM " + Tables.RECIPE_INGREDIENTS + " WHERE " + Fields.RECIPE_ID + " = ?;");
 			recipeDelete.setInt(1, id);
 			relationDelete.setInt(1, id);
 			

@@ -15,5 +15,7 @@ public class Fields {
 	public static String ICON_ID = "iconID";
 	public static String RECIPE_ID = "recipe_id";
 	public static String INGREDIENT_ID = "ingredient_id";
+	public static String AMOUNT = "amount";
+	public static String INGREDIENTS = "ingredients";
 
 }
