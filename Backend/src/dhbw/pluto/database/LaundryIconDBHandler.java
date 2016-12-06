@@ -9,23 +9,25 @@ import dhbw.pluto.controller.exception.IconLoadingException;
 import dhbw.pluto.model.LaundryIcon;
 import dhbw.pluto.model.LaundryIconCollection;
 
+import dhbw.pluto.database.strings.*;
+
 public class LaundryIconDBHandler {
 
-	public static LaundryIconCollection loadLaundyIcons() throws IconLoadingException {
+	public static LaundryIconCollection loadLaundryIcons() throws IconLoadingException {
 		
 		LaundryIconCollection laundryIcons = new LaundryIconCollection();
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 			Statement statement = connection.createStatement();
 			
-			ResultSet set = statement.executeQuery("SELECT * FROM laundryIconView;");
+			ResultSet set = statement.executeQuery("SELECT * FROM " + Tables.LAUNDRY_ICON_VIEW + ";");
 			while(set.next()) {
-				String iconUrl = set.getString("url");
-				String iconDescription = set.getString("description");
-				String iconName = set.getString("name");
-				String[] tags = set.getString("tags").split(",");
+				String iconUrl = set.getString(Fields.URL);
+				String iconDescription = set.getString(Fields.DESCRIPTION);
+				String iconName = set.getString(Fields.NAME);
+				String[] tags = set.getString(Tables.TAGS).split(",");
 				LaundryIcon currentItem = new LaundryIcon(iconUrl, iconDescription, iconName, tags);
 				laundryIcons.add(currentItem);
 			}

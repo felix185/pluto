@@ -51,7 +51,7 @@ public class LaundryController {
 	public Response listIcons() {
 		JSONArray result;
 		try {
-			result = LaundryIconDBHandler.loadLaundyIcons().toJSON();
+			result = LaundryIconDBHandler.loadLaundryIcons().toJSON();
 		} catch(IconLoadingException e) {
 			return Response.status(501).build();
 		}
