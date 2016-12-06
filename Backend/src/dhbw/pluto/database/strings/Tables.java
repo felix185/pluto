@@ -4,6 +4,7 @@ public class Tables {
 	
 	public static String DB = "pluto.db";
 	
+	public static String ACTIVITIES = "activities";
 	public static String RECIPE_VIEW = "RecipeView";
 	public static String RECIPES = "Recipes";
 	public static String INGREDIENTS = "Ingredients";
