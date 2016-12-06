@@ -1,4 +1,4 @@
-package dhbw.pluto.laundry;
+package dhbw.pluto.controller.exception;
 
 public class IconLoadingException extends Exception{
 

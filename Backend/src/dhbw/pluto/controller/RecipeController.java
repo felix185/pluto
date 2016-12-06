@@ -1,10 +1,10 @@
-package dhbw.pluto.api;
+package dhbw.pluto.controller;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,18 +15,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import dhbw.pluto.activities.ActivityController;
-import dhbw.pluto.activities.ActivityCreationException;
-import dhbw.pluto.activities.RecipeCreationActivity;
-import dhbw.pluto.activities.RecipeDeletionActivity;
-import dhbw.pluto.activities.RecipeSearchActivity;
-import dhbw.pluto.recipes.*;
+import dhbw.pluto.controller.exception.ActivityCreationException;
+import dhbw.pluto.controller.exception.RecipeCreationException;
+import dhbw.pluto.controller.exception.RecipeDeletionException;
+import dhbw.pluto.controller.exception.RecipeLoadingException;
+import dhbw.pluto.database.ActivityDBHandler;
+import dhbw.pluto.database.RecipeDBHandler;
+import dhbw.pluto.model.Ingredient;
+import dhbw.pluto.model.IngredientCollection;
+import dhbw.pluto.model.actvities.RecipeCreationActivity;
+import dhbw.pluto.model.actvities.RecipeDeletionActivity;
+import dhbw.pluto.model.actvities.RecipeSearchActivity;
 
 @Path("/meta")
-public class RecipeCollection {
+public class RecipeController {
 	//create a recipe
 	@POST
 	@Path("/recipe")
@@ -36,7 +38,7 @@ public class RecipeCollection {
 		try {
 			JSONObject newRcp = new JSONObject(newRecipe);
 			JSONArray ingredients = newRcp.getJSONArray("ingredients");
-			List<Ingredient> ingre = new ArrayList<Ingredient>();
+			IngredientCollection ingre = new IngredientCollection();
 			for(int i = 0; i < ingredients.length(); i++) {
 				//check if not null
 				if (isIngredientValid(ingredients.getJSONObject(i))) {
@@ -48,9 +50,9 @@ public class RecipeCollection {
 				
 			}
 			if (!newRcp.getString("title").equals("") && !newRcp.getString("text").equals("") && !newRcp.getString("eMail").equals("")) {
-				RecipeController.createRecipe(newRcp.getString("title"), newRcp.getString("text"), newRcp.getString("eMail"), ingre);
+				RecipeDBHandler.createRecipe(newRcp.getString("title"), newRcp.getString("text"), newRcp.getString("eMail"), ingre);
 				try {
-					ActivityController.writeActivity(new RecipeCreationActivity(newRcp.getString("eMail"), System.currentTimeMillis(), newRcp.getString("title")));
+					ActivityDBHandler.writeActivity(new RecipeCreationActivity(newRcp.getString("eMail"), System.currentTimeMillis(), newRcp.getString("title")));
 				} catch(ActivityCreationException e) {
 					e.printStackTrace();
 				}
@@ -77,7 +79,7 @@ public class RecipeCollection {
 		try {
 				
 			JSONArray ingredients = new JSONArray(ingredientsString);			
-			List<Ingredient> ingre = new ArrayList<Ingredient>();
+			IngredientCollection ingre = new IngredientCollection();
 			for(int i = 0; i < ingredients.length(); i++) {
 			
 				if (isIngredientValid(ingredients.getJSONObject(i))) {
@@ -88,9 +90,9 @@ public class RecipeCollection {
 				}
 			}
 			
-			recipes = convertRecipes(RecipeController.searchRecipes(ingre));	
+			recipes = RecipeDBHandler.searchRecipes(ingre).toJSON();	
 			try {
-				ActivityController.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
+				ActivityDBHandler.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
 			} catch (ActivityCreationException e) {
 				e.printStackTrace();
 			}
@@ -116,20 +118,12 @@ public class RecipeCollection {
 	public Response listRecipes() {
 		JSONArray result;
 		try {
-			result = convertRecipes(RecipeController.showRecipes());
+			result = RecipeDBHandler.showRecipes().toJSON();
 		} catch(RecipeLoadingException e) {
 			return Response.status(500).build();
 		}
 		
 		return Response.status(200).entity(result.toString()).build(); 
-	}
-
-	private JSONArray convertRecipes(List<Recipe> recipes) {
-		JSONArray result = new JSONArray();
-		for (int i = 0; i < recipes.size(); i++) {
-			result.put(recipes.get(i).toJSON());
-		}
-		return result;
 	}
 	
 	
@@ -139,7 +133,7 @@ public class RecipeCollection {
 	public Response removeRecipe(@PathParam("id") int id) {
 		try {
 			if (id > 0) {
-				RecipeController.deleteRecipe(id);
+				RecipeDBHandler.deleteRecipe(id);
 			} else {
 				return Response.status(400).build();
 			}
@@ -147,7 +141,7 @@ public class RecipeCollection {
 			return Response.status(500).build();
 		}
 		try {
-			ActivityController.writeActivity(new RecipeDeletionActivity(System.currentTimeMillis(), id));
+			ActivityDBHandler.writeActivity(new RecipeDeletionActivity(System.currentTimeMillis(), id));
 		} catch(ActivityCreationException e) {
 			e.printStackTrace();
 		}

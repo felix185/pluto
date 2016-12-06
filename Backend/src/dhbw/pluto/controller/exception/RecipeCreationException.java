@@ -1,4 +1,4 @@
-package dhbw.pluto.recipes;
+package dhbw.pluto.controller.exception;
 
 public class RecipeCreationException extends Exception {
 	public RecipeCreationException() {

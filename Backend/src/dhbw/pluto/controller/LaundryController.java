@@ -1,6 +1,4 @@
-package dhbw.pluto.api;
-
-import java.util.List;
+package dhbw.pluto.controller;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -14,14 +12,12 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
-import dhbw.pluto.activities.ActivityController;
-import dhbw.pluto.activities.ActivityCreationException;
-import dhbw.pluto.activities.LaundryReminderCreationActivity;
-import dhbw.pluto.activities.RecipeCreationActivity;
-import dhbw.pluto.laundry.IconLoadingException;
-import dhbw.pluto.laundry.LaundryAlert;
-import dhbw.pluto.laundry.LaundryIcon;
-import dhbw.pluto.laundry.LaundryIconLoader;
+import dhbw.pluto.controller.exception.ActivityCreationException;
+import dhbw.pluto.controller.exception.IconLoadingException;
+import dhbw.pluto.database.ActivityDBHandler;
+import dhbw.pluto.database.LaundryIconDBHandler;
+import dhbw.pluto.model.LaundryAlert;
+import dhbw.pluto.model.actvities.LaundryReminderCreationActivity;
 
 
 @Path("/laundry")
@@ -42,7 +38,7 @@ public class LaundryController {
 		LaundryAlert alert = new LaundryAlert(email, time);
 		alert.initializeAlert();
 		try {
-			ActivityController.writeActivity(new LaundryReminderCreationActivity(System.currentTimeMillis(), email, time));
+			ActivityDBHandler.writeActivity(new LaundryReminderCreationActivity(System.currentTimeMillis(), email, time));
 		} catch (ActivityCreationException e) {
 			e.printStackTrace();
 		}
@@ -55,20 +51,13 @@ public class LaundryController {
 	public Response listIcons() {
 		JSONArray result;
 		try {
-			result = convertIcons(LaundryIconLoader.loadLaundyIcons());
+			result = LaundryIconDBHandler.loadLaundryIcons().toJSON();
 		} catch(IconLoadingException e) {
 			return Response.status(501).build();
 		}
 		return Response.status(200).entity(result.toString()).build();
 	}
 	
-	private JSONArray convertIcons(List<LaundryIcon> icons) {
-		JSONArray result = new JSONArray();
-		for(int i = 0; i < icons.size(); i++) {
-			result.put(icons.get(i).toJSON());
-		}
-		return result;
-	}
 	
 
 }

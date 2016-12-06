@@ -1,8 +1,8 @@
-package dhbw.pluto.recipes;
+package dhbw.pluto.model;
 
-import java.util.List;
-
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Recipe {
 	
@@ -10,14 +10,14 @@ public class Recipe {
 	private String title;
 	private String author;
 	private String text;
-	List<Ingredient> ingredients;
+	IngredientCollection ingredients;
 	private int score = 100;
 	
 	/*
 	 * Constructor
 	 */
 	
-	public Recipe (int id, String title, String author, String text, List<Ingredient> ingredients) {
+	public Recipe (int id, String title, String author, String text, IngredientCollection ingredients) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -35,10 +35,7 @@ public class Recipe {
 	        result.put("text", text);
 	        result.put("eMail", author);
 	        result.put("score", score);
-	        JSONArray ingredientsArray = new JSONArray();
-	        for(int i = 0; i < ingredients.size(); i++) {
-	        	ingredientsArray.put(ingredients.get(i).toJSON());
-	        }
+	        JSONArray ingredientsArray = ingredients.toJSON();
 	        result.put("ingredients", ingredientsArray);
 	    } catch (JSONException e) {
 	        // put() throws e, if key==null. Since key=<STRING>, this exception should never be thrown.

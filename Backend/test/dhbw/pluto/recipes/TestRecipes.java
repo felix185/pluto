@@ -6,13 +6,13 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import dhbw.pluto.api.LaundryController;
-import dhbw.pluto.api.RecipeCollection;
+import dhbw.pluto.controller.RecipeController;
+import dhbw.pluto.controller.LaundryController;
 
 
 public class TestRecipes {
 
-	RecipeCollection recipeCollection = new RecipeCollection();
+	RecipeController RecipeController = new RecipeController();
 	LaundryController laundryController = new LaundryController();
 	
 	@Test
@@ -34,48 +34,48 @@ public class TestRecipes {
 	@Test
 	public void testCreateRecipeValidParameters() {
 		String validRecipe = "{\"text\": \"Wasser kochen, Brühwürfel darin auflösen, Nudeln dazu geben\",\"title\": \"Nudelsuppe\",\"eMail\": \"test@web.de\",\"ingredients\": [ {\"name\": \"Nudeln\", \"amount\": \"200\"}, {\"name\": \"Wasser\", \"amount\": \"3\"}, {\"name\": \"Brühwürfel\", \"amount\": \"1\"} ]}";
-		Response response = recipeCollection.createRecipe(validRecipe);
+		Response response = RecipeController.createRecipe(validRecipe);
 		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testCreateRecipeInvalidParameters() {
 		String invalidRecipe = "{\"text\": \"Wasser kochen, Brühwürfel darin auflösen, Nudeln dazu geben\",\"eMail\": \"test@web.de\",\"ingredients\": [ {\"name\": \"Nudeln\", \"amount\": \"200\"}, {\"name\": \"Wasser\", \"amount\": \"3\"}, {\"name\": \"Brühwürfel\", \"amount\": \"1\"} ]}";
-		Response response = recipeCollection.createRecipe(invalidRecipe);
+		Response response = RecipeController.createRecipe(invalidRecipe);
 		assertEquals(400, response.getStatus());
 	}
 
 	@Test
 	public void testSearchRecipesValidParameters() {
 		String validSearchParameter = "[{\"name\":\"Wasser\", \"amount\":\"3\"}, {\"name\":\"Brühwürfel\", \"amount\":\"1\"}, {\"name\":\"Nudeln\", \"amount\":\"200\"}]";
-		Response response = recipeCollection.searchRecipe(validSearchParameter);
+		Response response = RecipeController.searchRecipe(validSearchParameter);
 		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testSearchRecipesInvalidParameters() {
 		String invalidSearchParameter = "[{\"name\" : \"Wasser\", \"amount\" : \"\"}, {\"name\" : \"Brühwürfel\", \"amount\" : \"1\"}, {\"name\" : \"Nudeln\", \"amount\" : \"200\"}]";
-		Response response = recipeCollection.searchRecipe(invalidSearchParameter);
+		Response response = RecipeController.searchRecipe(invalidSearchParameter);
 		assertEquals(400, response.getStatus());
 	}
 
 	@Test
 	public void testDeleteRecipeValidParameters() {
 		int validParameter = 1;
-		Response response = recipeCollection.removeRecipe(validParameter);
+		Response response = RecipeController.removeRecipe(validParameter);
 		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testDeleteRecipeInvalidParameters() {
 		int invalidParameter = 0;
-		Response response = recipeCollection.removeRecipe(invalidParameter);
+		Response response = RecipeController.removeRecipe(invalidParameter);
 		assertEquals(400, response.getStatus());
 	}
 	
 	@Test
 	public void testListRecipes() {
-		Response response = recipeCollection.listRecipes();
+		Response response = RecipeController.listRecipes();
 		assertEquals(200, response.getStatus());
 	}
 	
