@@ -1,7 +1,8 @@
-package dhbw.pluto.activities;
+package dhbw.pluto.model.actvities;
 
 import java.util.List;
-import dhbw.pluto.recipes.Ingredient;
+
+import dhbw.pluto.model.Ingredient;
 
 public class RecipeSearchActivity extends Activity {
 

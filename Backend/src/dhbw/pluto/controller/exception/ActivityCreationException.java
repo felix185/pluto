@@ -1,4 +1,4 @@
-package dhbw.pluto.activities;
+package dhbw.pluto.controller.exception;
 
 public class ActivityCreationException extends Exception {
 	
