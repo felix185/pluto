@@ -9,6 +9,7 @@ import dhbw.pluto.controller.exception.RecipeDeletionException;
 import dhbw.pluto.controller.exception.RecipeLoadingException;
 import dhbw.pluto.model.Ingredient;
 import dhbw.pluto.model.Recipe;
+import dhbw.pluto.database.strings.*;
 
 public class RecipeDBHandler {
 
@@ -20,10 +21,10 @@ public class RecipeDBHandler {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 			connection.setAutoCommit(false);
 			
-			statement = connection.prepareStatement("INSERT INTO Recipes (title, author, text) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement("INSERT INTO " + Tables.RECIPES + " (title, author, text) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, title);
 			statement.setString(2,  author);
 			statement.setString(3, text);
@@ -34,8 +35,8 @@ public class RecipeDBHandler {
 			} else {
 				throw new SQLException("Creating recipe failed, no ID obtained");
 			}
-			PreparedStatement ingredientCheck = connection.prepareStatement("INSERT INTO Ingredients (name) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM Ingredients WHERE name = ?);");
-			PreparedStatement ingredientMatch = connection.prepareStatement("INSERT INTO recipes_ingredients (recipe_id, ingredient_id, amount) SELECT ?, id, ? FROM Ingredients WHERE name = ?;");
+			PreparedStatement ingredientCheck = connection.prepareStatement("INSERT INTO " + Tables.INGREDIENTS + " (name) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM "+ Tables.INGREDIENTS +" WHERE name = ?);");
+			PreparedStatement ingredientMatch = connection.prepareStatement("INSERT INTO " + Tables.RECIPE_INGREDIENTS + " (recipe_id, ingredient_id, amount) SELECT ?, id, ? FROM " + Tables.INGREDIENTS + " WHERE name = ?;");
 			
 			for(Ingredient currentIngredient : ingredients) {
 				ingredientCheck.setString(1, currentIngredient.getName());
@@ -76,11 +77,11 @@ public class RecipeDBHandler {
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
-		      connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+		      connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 		      connection.setAutoCommit(false);
 
 		      statement = connection.createStatement();
-		      ResultSet rs = statement.executeQuery( "SELECT * FROM RecipeView;" );
+		      ResultSet rs = statement.executeQuery( "SELECT * FROM " + Tables.RECIPE_VIEW + ";" );
 		      while ( rs.next() ) {
 		    	  int id = rs.getInt("id");
 		          String  title = rs.getString("title");
@@ -118,7 +119,7 @@ public class RecipeDBHandler {
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
-		      Connection connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+		      Connection connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 		      connection.setAutoCommit(false);
 
 		      PreparedStatement statement = connection.prepareStatement(buildSearchQuery(givenIngredients.size()));
@@ -159,12 +160,12 @@ public class RecipeDBHandler {
 	}
 	
 	private static String buildSearchQuery(int countIngredients) {
-		String baseQuery = "SELECT * FROM RecipeView " +
+		String baseQuery = "SELECT * FROM " + Tables.RECIPE_VIEW + " " +
 							"WHERE NOT EXISTS " +
 							"( "+
-							"SELECT * FROM recipes_ingredients LEFT JOIN " +
+							"SELECT * FROM " + Tables.RECIPE_INGREDIENTS + " LEFT JOIN " +
 							"( " +
-							"SELECT name AS ingredientName, id AS ingredientId FROM Ingredients " +
+							"SELECT name AS ingredientName, id AS ingredientId FROM " + Tables.INGREDIENTS + " " +
 							"WHERE name IN (?";
 		
 		for(int i = 1; i < countIngredients; i++) {
@@ -173,8 +174,8 @@ public class RecipeDBHandler {
 		
 		baseQuery += ") "+
 						") " +  
-						"ON ingredientId = recipes_ingredients.ingredient_id " + 
-						"WHERE ingredientName IS NULL AND RecipeView.id = recipes_ingredients.recipe_id " + 
+						"ON ingredientId = " + Tables.INGREDIENTS + ".ingredient_id " + 
+						"WHERE ingredientName IS NULL AND " + Tables.RECIPE_VIEW + ".id = " + Tables.RECIPE_INGREDIENTS + ".recipe_id " + 
 						");";
 		return baseQuery;
 	}
@@ -186,11 +187,11 @@ public class RecipeDBHandler {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + Tables.DB);
 			connection.setAutoCommit(false);
 			
-			PreparedStatement recipeDelete = connection.prepareStatement("DELETE FROM Recipes WHERE id = ?;");
-			PreparedStatement relationDelete = connection.prepareStatement("DELETE FROM recipes_ingredients WHERE recipe_id = ?;");
+			PreparedStatement recipeDelete = connection.prepareStatement("DELETE FROM " + Tables.RECIPES + " WHERE id = ?;");
+			PreparedStatement relationDelete = connection.prepareStatement("DELETE FROM " + Tables.RECIPE_INGREDIENTS + " WHERE recipe_id = ?;");
 			recipeDelete.setInt(1, id);
 			relationDelete.setInt(1, id);
 			
