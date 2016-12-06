@@ -1,20 +1,25 @@
 package dhbw.pluto.database;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import dhbw.pluto.controller.exception.RecipeCreationException;
 import dhbw.pluto.controller.exception.RecipeDeletionException;
 import dhbw.pluto.controller.exception.RecipeLoadingException;
 import dhbw.pluto.model.Ingredient;
+import dhbw.pluto.model.IngredientCollection;
 import dhbw.pluto.model.Recipe;
 import dhbw.pluto.database.strings.*;
+import dhbw.pluto.model.RecipeCollection;
 
 public class RecipeDBHandler {
 
 	//create
-	public static void createRecipe(String title, String text, String author, List<Ingredient> ingredients) throws RecipeCreationException {
+	public static void createRecipe(String title, String text, String author, IngredientCollection ingredients) throws RecipeCreationException {
 		Recipe recipe;
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -68,12 +73,11 @@ public class RecipeDBHandler {
 	}
 	
 	//show
-	public static List<Recipe> showRecipes() throws RecipeLoadingException {
+	public static RecipeCollection showRecipes() throws RecipeLoadingException {
 		Connection connection = null;
 		Statement statement = null;
 		
-		List<Recipe> recipes = new ArrayList<>();
-		List<Ingredient> ingredients = new ArrayList<>();
+		RecipeCollection recipes = new RecipeCollection();
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
@@ -82,25 +86,8 @@ public class RecipeDBHandler {
 
 		      statement = connection.createStatement();
 		      ResultSet rs = statement.executeQuery( "SELECT * FROM " + Tables.RECIPE_VIEW + ";" );
-		      while ( rs.next() ) {
-		    	  int id = rs.getInt("id");
-		          String  title = rs.getString("title");
-		          String author  = rs.getString("author");
-		          String  text = rs.getString("text");
-		          
-		          String[] ingredient = rs.getString("ingredients").split(";");
-		          for (int i = 0; i < ingredient.length; i++) {
-		        	  String[] currIngr = ingredient[i].split(",");
-		        	  String name = currIngr[0];
-		        	  String amount = currIngr[1];
-		        	  
-		        	  Ingredient currentIngredient = new Ingredient(name, amount);
-		        	  ingredients.add(currentIngredient);
-		          }
-		          
-		          Recipe currentRecipe = new Recipe(id, title, author, text, ingredients);
-		          ingredients = new ArrayList<>();
-		          recipes.add(currentRecipe);
+		      while (rs.next()) {
+		          recipes.add(createRecipeFromResultSet(rs));
 		       }
 		       rs.close();
 		       statement.close();
@@ -111,11 +98,9 @@ public class RecipeDBHandler {
 		return recipes;
 	}
 	
-
 	
-	public static List<Recipe> searchRecipes(List<Ingredient> givenIngredients) throws RecipeLoadingException {
-		List<Recipe> recipes = new ArrayList<>();
-		List<Ingredient> ingredients = new ArrayList<>();
+	public static RecipeCollection searchRecipes(IngredientCollection givenIngredients) throws RecipeLoadingException {
+		RecipeCollection recipes = new RecipeCollection();
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
@@ -130,33 +115,30 @@ public class RecipeDBHandler {
 		      
 		      ResultSet rs = statement.executeQuery();
 		      while ( rs.next() ) {
-		    	  int id = rs.getInt("id");
-		          String  title = rs.getString("title");
-		          String author  = rs.getString("author");
-		          String  text = rs.getString("text");
-		          
-		          String[] ingredient = rs.getString("ingredients").split(";");
-		          for (int i = 0; i < ingredient.length; i++) {
-		        	  String[] currIngr = ingredient[i].split(",");
-		        	  String name = currIngr[0];
-		        	  String amount = currIngr[1];
-		        	  
-		        	  Ingredient currentIngredient = new Ingredient(name, amount);
-		        	  ingredients.add(currentIngredient);
-		          }
-		          
-		          Recipe currentRecipe = new Recipe(id, title, author, text, ingredients);
-		          ingredients = new ArrayList<>();
-		          recipes.add(currentRecipe);
-		       }
+		    	  recipes.add(createRecipeFromResultSet(rs));
+		      }
 		       rs.close();
 		       statement.close();
-		       connection.close();
-		     } catch ( Exception e ) {
-		    	 throw new RecipeLoadingException("The recipes could not be loaded from the database. Reason: " + e.getMessage());
-		     }
+		      connection.close();
+		     
+		} catch ( Exception e ) {
+		   	 throw new RecipeLoadingException("The recipes could not be loaded from the database. Reason: " + e.getMessage());
+		}
 		
 		return recipes;
+	}
+	
+	private static Recipe createRecipeFromResultSet(ResultSet rs) throws SQLException {
+		IngredientCollection ingredients = new IngredientCollection();
+		int id = rs.getInt("id");
+        String  title = rs.getString("title");
+        String author  = rs.getString("author");
+        String text = rs.getString("text");		          
+        String ingredient = rs.getString("ingredients");        
+        
+        ingredients.fillFromString(ingredient);
+        
+        return new Recipe(id, title, author, text, ingredients);		
 	}
 	
 	private static String buildSearchQuery(int countIngredients) {

@@ -4,18 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import dhbw.pluto.controller.exception.IconLoadingException;
 import dhbw.pluto.model.LaundryIcon;
-import dhbw.pluto.model.actvities.Activity;
+import dhbw.pluto.model.LaundryIconCollection;
 
 public class LaundryIconDBHandler {
 
-	public static List<LaundryIcon> loadLaundyIcons() throws IconLoadingException {
+	public static LaundryIconCollection loadLaundyIcons() throws IconLoadingException {
 		
-		List<LaundryIcon> laundryIcons = new ArrayList<>();
+		LaundryIconCollection laundryIcons = new LaundryIconCollection();
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
