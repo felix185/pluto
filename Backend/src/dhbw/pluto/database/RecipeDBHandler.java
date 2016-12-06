@@ -1,13 +1,16 @@
-package dhbw.pluto.recipes;
+package dhbw.pluto.database;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import dhbw.pluto.recipes.Recipe;
-import dhbw.pluto.recipes.Ingredient;
+import dhbw.pluto.controller.exception.RecipeCreationException;
+import dhbw.pluto.controller.exception.RecipeDeletionException;
+import dhbw.pluto.controller.exception.RecipeLoadingException;
+import dhbw.pluto.model.Ingredient;
+import dhbw.pluto.model.Recipe;
 
-public class RecipeController {
+public class RecipeDBHandler {
 
 	//create
 	public static void createRecipe(String title, String text, String author, List<Ingredient> ingredients) throws RecipeCreationException {

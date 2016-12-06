@@ -1,4 +1,4 @@
-package dhbw.pluto.laundry;
+package dhbw.pluto.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,9 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import dhbw.pluto.activities.Activity;
+import dhbw.pluto.controller.exception.IconLoadingException;
+import dhbw.pluto.model.LaundryIcon;
+import dhbw.pluto.model.actvities.Activity;
 
-public class LaundryIconLoader {
+public class LaundryIconDBHandler {
 
 	public static List<LaundryIcon> loadLaundyIcons() throws IconLoadingException {
 		

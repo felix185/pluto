@@ -1,4 +1,4 @@
-package dhbw.pluto.activities;
+package dhbw.pluto.model.actvities;
 
 public class LaundryReminderCreationActivity extends Activity {
 	

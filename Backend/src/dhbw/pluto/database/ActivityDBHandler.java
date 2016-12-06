@@ -1,4 +1,4 @@
-package dhbw.pluto.activities;
+package dhbw.pluto.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,10 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.pluto.controller.exception.ActivityCreationException;
+import dhbw.pluto.controller.exception.ActivityLoadingException;
+import dhbw.pluto.model.actvities.Activity;
 
-public class ActivityController {
 
-	public ActivityController() {
+public class ActivityDBHandler {
+
+	public ActivityDBHandler() {
 		
 	}
 	

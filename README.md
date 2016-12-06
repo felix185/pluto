@@ -26,3 +26,11 @@ The CSS framework is Semantic UI. The JS framework is React.
 
 ## 3. Branching
 We use the 'develop' branch as our main branch for development. The master branch holds production-ready code.
+
+## 4. Run Tests
+- You need the junit.jar, Version 4.10, which you can find here: https://github.com/junit-team/junit4/wiki/Download-and-Install
+- Compile the current source files (in particular, make sure that the compiled .class-Files are located at build/classes/...). Make sure the "test"-Folder is tagged as a ressource folder. You may need to include the junit library into the buildpath in order to compile the test correctly.
+- Move the current Pluto.db in your Backend-Folder.
+- Open the Commandline, navigate pluto's "Backend" folder and enter the command that you can download here: https://github.com/felix185/pluto/releases/tag/v0.2 Make sure to replace the `PATH_TO_JUNIT` to the jar file that you just downloaded.
+
+

@@ -1,4 +1,4 @@
-package dhbw.pluto.laundry;
+package dhbw.pluto.model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
