@@ -1,4 +1,4 @@
-package dhbw.pluto.activities;
+package dhbw.pluto.model.actvities;
 
 import org.json.JSONException;
 import org.json.JSONObject;

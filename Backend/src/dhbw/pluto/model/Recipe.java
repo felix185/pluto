@@ -1,4 +1,4 @@
-package dhbw.pluto.recipes;
+package dhbw.pluto.model;
 
 import java.util.List;
 

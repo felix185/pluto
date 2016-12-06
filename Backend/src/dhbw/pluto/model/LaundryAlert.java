@@ -1,4 +1,4 @@
-package dhbw.pluto.laundry;
+package dhbw.pluto.model;
 
 import java.util.Calendar;
 import java.util.Properties;
@@ -8,10 +8,9 @@ import java.util.concurrent.TimeUnit;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import dhbw.pluto.activities.ActivityController;
-import dhbw.pluto.activities.ActivityCreationException;
-import dhbw.pluto.activities.LaundryNotificationActivity;
-import dhbw.pluto.activities.LaundryReminderCreationActivity;
+import dhbw.pluto.controller.exception.ActivityCreationException;
+import dhbw.pluto.database.ActivityDBHandler;
+import dhbw.pluto.model.actvities.LaundryNotificationActivity;
 
 
 
@@ -68,7 +67,7 @@ public class LaundryAlert extends ScheduledThreadPoolExecutor {
 					mex.printStackTrace();
 				}
 				try {
-					ActivityController.writeActivity(new LaundryNotificationActivity(System.currentTimeMillis(), to));
+					ActivityDBHandler.writeActivity(new LaundryNotificationActivity(System.currentTimeMillis(), to));
 				} catch (ActivityCreationException e) {
 					e.printStackTrace();
 				}

@@ -1,4 +1,4 @@
-package dhbw.pluto.recipes;
+package dhbw.pluto.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

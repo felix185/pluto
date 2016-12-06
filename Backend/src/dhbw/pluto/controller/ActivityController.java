@@ -1,4 +1,4 @@
-package dhbw.pluto.api;
+package dhbw.pluto.controller;
 
 import java.util.List;
 
@@ -8,20 +8,20 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
-import dhbw.pluto.activities.Activity;
-import dhbw.pluto.activities.ActivityController;
-import dhbw.pluto.activities.ActivityLoadingException;
+import dhbw.pluto.controller.exception.ActivityLoadingException;
+import dhbw.pluto.database.ActivityDBHandler;
+import dhbw.pluto.model.actvities.Activity;
 
 
 @Path("/meta")
-public class ActivityLog {
+public class ActivityController {
 		
 	@GET
 	@Path("/activities")
 	public Response getActivities() {
 		JSONArray result;
 		try {
-			result = convertActivities(ActivityController.getActivities());
+			result = convertActivities(ActivityDBHandler.getActivities());
 		} catch(ActivityLoadingException e)
 		{
 

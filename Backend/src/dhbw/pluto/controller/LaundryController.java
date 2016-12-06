@@ -1,4 +1,4 @@
-package dhbw.pluto.api;
+package dhbw.pluto.controller;
 
 import java.util.List;
 
@@ -14,14 +14,14 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
-import dhbw.pluto.activities.ActivityController;
-import dhbw.pluto.activities.ActivityCreationException;
-import dhbw.pluto.activities.LaundryReminderCreationActivity;
-import dhbw.pluto.activities.RecipeCreationActivity;
-import dhbw.pluto.laundry.IconLoadingException;
-import dhbw.pluto.laundry.LaundryAlert;
-import dhbw.pluto.laundry.LaundryIcon;
-import dhbw.pluto.laundry.LaundryIconLoader;
+import dhbw.pluto.controller.exception.ActivityCreationException;
+import dhbw.pluto.controller.exception.IconLoadingException;
+import dhbw.pluto.database.ActivityDBHandler;
+import dhbw.pluto.database.LaundryIconDBHandler;
+import dhbw.pluto.model.LaundryAlert;
+import dhbw.pluto.model.LaundryIcon;
+import dhbw.pluto.model.actvities.LaundryReminderCreationActivity;
+import dhbw.pluto.model.actvities.RecipeCreationActivity;
 
 
 @Path("/laundry")
@@ -42,7 +42,7 @@ public class LaundryController {
 		LaundryAlert alert = new LaundryAlert(email, time);
 		alert.initializeAlert();
 		try {
-			ActivityController.writeActivity(new LaundryReminderCreationActivity(System.currentTimeMillis(), email, time));
+			ActivityDBHandler.writeActivity(new LaundryReminderCreationActivity(System.currentTimeMillis(), email, time));
 		} catch (ActivityCreationException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +55,7 @@ public class LaundryController {
 	public Response listIcons() {
 		JSONArray result;
 		try {
-			result = convertIcons(LaundryIconLoader.loadLaundyIcons());
+			result = convertIcons(LaundryIconDBHandler.loadLaundyIcons());
 		} catch(IconLoadingException e) {
 			return Response.status(501).build();
 		}

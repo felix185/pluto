@@ -1,4 +1,4 @@
-package dhbw.pluto.api;
+package dhbw.pluto.controller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,15 +18,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import dhbw.pluto.activities.ActivityController;
-import dhbw.pluto.activities.ActivityCreationException;
-import dhbw.pluto.activities.RecipeCreationActivity;
-import dhbw.pluto.activities.RecipeDeletionActivity;
-import dhbw.pluto.activities.RecipeSearchActivity;
-import dhbw.pluto.recipes.*;
+import dhbw.pluto.controller.exception.ActivityCreationException;
+import dhbw.pluto.controller.exception.RecipeCreationException;
+import dhbw.pluto.controller.exception.RecipeDeletionException;
+import dhbw.pluto.controller.exception.RecipeLoadingException;
+import dhbw.pluto.database.ActivityDBHandler;
+import dhbw.pluto.database.RecipeDBHandler;
+import dhbw.pluto.model.Ingredient;
+import dhbw.pluto.model.Recipe;
+import dhbw.pluto.model.actvities.RecipeCreationActivity;
+import dhbw.pluto.model.actvities.RecipeDeletionActivity;
+import dhbw.pluto.model.actvities.RecipeSearchActivity;
 
 @Path("/meta")
-public class RecipeCollection {
+public class RecipeController {
 	//create a recipe
 	@POST
 	@Path("/recipe")
@@ -48,9 +53,9 @@ public class RecipeCollection {
 				
 			}
 			if (!newRcp.getString("title").equals("") && !newRcp.getString("text").equals("") && !newRcp.getString("eMail").equals("")) {
-				RecipeController.createRecipe(newRcp.getString("title"), newRcp.getString("text"), newRcp.getString("eMail"), ingre);
+				RecipeDBHandler.createRecipe(newRcp.getString("title"), newRcp.getString("text"), newRcp.getString("eMail"), ingre);
 				try {
-					ActivityController.writeActivity(new RecipeCreationActivity(newRcp.getString("eMail"), System.currentTimeMillis(), newRcp.getString("title")));
+					ActivityDBHandler.writeActivity(new RecipeCreationActivity(newRcp.getString("eMail"), System.currentTimeMillis(), newRcp.getString("title")));
 				} catch(ActivityCreationException e) {
 					e.printStackTrace();
 				}
@@ -88,9 +93,9 @@ public class RecipeCollection {
 				}
 			}
 			
-			recipes = convertRecipes(RecipeController.searchRecipes(ingre));	
+			recipes = convertRecipes(RecipeDBHandler.searchRecipes(ingre));	
 			try {
-				ActivityController.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
+				ActivityDBHandler.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
 			} catch (ActivityCreationException e) {
 				e.printStackTrace();
 			}
@@ -116,7 +121,7 @@ public class RecipeCollection {
 	public Response listRecipes() {
 		JSONArray result;
 		try {
-			result = convertRecipes(RecipeController.showRecipes());
+			result = convertRecipes(RecipeDBHandler.showRecipes());
 		} catch(RecipeLoadingException e) {
 			return Response.status(500).build();
 		}
@@ -139,7 +144,7 @@ public class RecipeCollection {
 	public Response removeRecipe(@PathParam("id") int id) {
 		try {
 			if (id > 0) {
-				RecipeController.deleteRecipe(id);
+				RecipeDBHandler.deleteRecipe(id);
 			} else {
 				return Response.status(400).build();
 			}
@@ -147,7 +152,7 @@ public class RecipeCollection {
 			return Response.status(500).build();
 		}
 		try {
-			ActivityController.writeActivity(new RecipeDeletionActivity(System.currentTimeMillis(), id));
+			ActivityDBHandler.writeActivity(new RecipeDeletionActivity(System.currentTimeMillis(), id));
 		} catch(ActivityCreationException e) {
 			e.printStackTrace();
 		}
