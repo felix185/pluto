@@ -1,19 +1,24 @@
 package dhbw.pluto.database;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import dhbw.pluto.controller.exception.RecipeCreationException;
 import dhbw.pluto.controller.exception.RecipeDeletionException;
 import dhbw.pluto.controller.exception.RecipeLoadingException;
 import dhbw.pluto.model.Ingredient;
+import dhbw.pluto.model.IngredientCollection;
 import dhbw.pluto.model.Recipe;
+import dhbw.pluto.model.RecipeCollection;
 
 public class RecipeDBHandler {
 
 	//create
-	public static void createRecipe(String title, String text, String author, List<Ingredient> ingredients) throws RecipeCreationException {
+	public static void createRecipe(String title, String text, String author, IngredientCollection ingredients) throws RecipeCreationException {
 		Recipe recipe;
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -67,12 +72,12 @@ public class RecipeDBHandler {
 	}
 	
 	//show
-	public static List<Recipe> showRecipes() throws RecipeLoadingException {
+	public static RecipeCollection showRecipes() throws RecipeLoadingException {
 		Connection connection = null;
 		Statement statement = null;
 		
-		List<Recipe> recipes = new ArrayList<>();
-		List<Ingredient> ingredients = new ArrayList<>();
+		RecipeCollection recipes = new RecipeCollection();
+		IngredientCollection ingredients = new IngredientCollection();
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
@@ -98,7 +103,7 @@ public class RecipeDBHandler {
 		          }
 		          
 		          Recipe currentRecipe = new Recipe(id, title, author, text, ingredients);
-		          ingredients = new ArrayList<>();
+		          ingredients = new IngredientCollection();
 		          recipes.add(currentRecipe);
 		       }
 		       rs.close();
@@ -112,9 +117,9 @@ public class RecipeDBHandler {
 	
 
 	
-	public static List<Recipe> searchRecipes(List<Ingredient> givenIngredients) throws RecipeLoadingException {
-		List<Recipe> recipes = new ArrayList<>();
-		List<Ingredient> ingredients = new ArrayList<>();
+	public static RecipeCollection searchRecipes(IngredientCollection givenIngredients) throws RecipeLoadingException {
+		RecipeCollection recipes = new RecipeCollection();
+		IngredientCollection ingredients = new IngredientCollection();
 		
 		try {
 		      Class.forName("org.sqlite.JDBC");
@@ -145,7 +150,7 @@ public class RecipeDBHandler {
 		          }
 		          
 		          Recipe currentRecipe = new Recipe(id, title, author, text, ingredients);
-		          ingredients = new ArrayList<>();
+		          ingredients = new IngredientCollection();
 		          recipes.add(currentRecipe);
 		       }
 		       rs.close();

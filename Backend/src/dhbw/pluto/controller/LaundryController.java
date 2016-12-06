@@ -1,7 +1,5 @@
 package dhbw.pluto.controller;
 
-import java.util.List;
-
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.ws.rs.Consumes;
@@ -19,9 +17,7 @@ import dhbw.pluto.controller.exception.IconLoadingException;
 import dhbw.pluto.database.ActivityDBHandler;
 import dhbw.pluto.database.LaundryIconDBHandler;
 import dhbw.pluto.model.LaundryAlert;
-import dhbw.pluto.model.LaundryIcon;
 import dhbw.pluto.model.actvities.LaundryReminderCreationActivity;
-import dhbw.pluto.model.actvities.RecipeCreationActivity;
 
 
 @Path("/laundry")
@@ -55,20 +51,13 @@ public class LaundryController {
 	public Response listIcons() {
 		JSONArray result;
 		try {
-			result = convertIcons(LaundryIconDBHandler.loadLaundyIcons());
+			result = LaundryIconDBHandler.loadLaundyIcons().toJSON();
 		} catch(IconLoadingException e) {
 			return Response.status(501).build();
 		}
 		return Response.status(200).entity(result.toString()).build();
 	}
 	
-	private JSONArray convertIcons(List<LaundryIcon> icons) {
-		JSONArray result = new JSONArray();
-		for(int i = 0; i < icons.size(); i++) {
-			result.put(icons.get(i).toJSON());
-		}
-		return result;
-	}
 	
 
 }

@@ -1,10 +1,10 @@
 package dhbw.pluto.controller;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,9 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dhbw.pluto.controller.exception.ActivityCreationException;
 import dhbw.pluto.controller.exception.RecipeCreationException;
 import dhbw.pluto.controller.exception.RecipeDeletionException;
@@ -25,7 +22,7 @@ import dhbw.pluto.controller.exception.RecipeLoadingException;
 import dhbw.pluto.database.ActivityDBHandler;
 import dhbw.pluto.database.RecipeDBHandler;
 import dhbw.pluto.model.Ingredient;
-import dhbw.pluto.model.Recipe;
+import dhbw.pluto.model.IngredientCollection;
 import dhbw.pluto.model.actvities.RecipeCreationActivity;
 import dhbw.pluto.model.actvities.RecipeDeletionActivity;
 import dhbw.pluto.model.actvities.RecipeSearchActivity;
@@ -41,7 +38,7 @@ public class RecipeController {
 		try {
 			JSONObject newRcp = new JSONObject(newRecipe);
 			JSONArray ingredients = newRcp.getJSONArray("ingredients");
-			List<Ingredient> ingre = new ArrayList<Ingredient>();
+			IngredientCollection ingre = new IngredientCollection();
 			for(int i = 0; i < ingredients.length(); i++) {
 				//check if not null
 				if (isIngredientValid(ingredients.getJSONObject(i))) {
@@ -82,7 +79,7 @@ public class RecipeController {
 		try {
 				
 			JSONArray ingredients = new JSONArray(ingredientsString);			
-			List<Ingredient> ingre = new ArrayList<Ingredient>();
+			IngredientCollection ingre = new IngredientCollection();
 			for(int i = 0; i < ingredients.length(); i++) {
 			
 				if (isIngredientValid(ingredients.getJSONObject(i))) {
@@ -93,7 +90,7 @@ public class RecipeController {
 				}
 			}
 			
-			recipes = convertRecipes(RecipeDBHandler.searchRecipes(ingre));	
+			recipes = RecipeDBHandler.searchRecipes(ingre).toJSON();	
 			try {
 				ActivityDBHandler.writeActivity(new RecipeSearchActivity(System.currentTimeMillis(), ingre));
 			} catch (ActivityCreationException e) {
@@ -121,20 +118,12 @@ public class RecipeController {
 	public Response listRecipes() {
 		JSONArray result;
 		try {
-			result = convertRecipes(RecipeDBHandler.showRecipes());
+			result = RecipeDBHandler.showRecipes().toJSON();
 		} catch(RecipeLoadingException e) {
 			return Response.status(500).build();
 		}
 		
 		return Response.status(200).entity(result.toString()).build(); 
-	}
-
-	private JSONArray convertRecipes(List<Recipe> recipes) {
-		JSONArray result = new JSONArray();
-		for (int i = 0; i < recipes.size(); i++) {
-			result.put(recipes.get(i).toJSON());
-		}
-		return result;
 	}
 	
 	
