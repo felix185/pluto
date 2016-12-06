@@ -1,10 +1,7 @@
 package dhbw.pluto.model;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONArray;
-
 import dhbw.pluto.controller.exception.ActivityLoadingException;
 import dhbw.pluto.model.actvities.Activity;
 
