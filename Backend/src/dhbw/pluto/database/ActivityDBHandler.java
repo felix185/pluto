@@ -10,6 +10,7 @@ import java.util.List;
 
 import dhbw.pluto.controller.exception.ActivityCreationException;
 import dhbw.pluto.controller.exception.ActivityLoadingException;
+import dhbw.pluto.model.ActivityCollection;
 import dhbw.pluto.model.actvities.Activity;
 
 
@@ -36,8 +37,8 @@ public class ActivityDBHandler {
 	}
 	
 
-	public static List<Activity> getActivities() throws ActivityLoadingException {
-		List<Activity> result = new ArrayList<>();
+	public static ActivityCollection getActivities() throws ActivityLoadingException {
+		ActivityCollection result = new ActivityCollection();
 		try {
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:pluto.db");

@@ -21,23 +21,11 @@ public class ActivityController {
 	public Response getActivities() {
 		JSONArray result;
 		try {
-			result = convertActivities(ActivityDBHandler.getActivities());
-		} catch(ActivityLoadingException e)
-		{
-
+			result =  ActivityDBHandler.getActivities().toJSON();
+		} catch(ActivityLoadingException e)	{
 			return Response.status(500).build();			
-
 		}
 		return Response.status(200).entity(result.toString()).build();
-	}
-	
-	private JSONArray convertActivities(List<Activity> activities) throws ActivityLoadingException {
-		JSONArray result = new JSONArray();
-		
-		for(int i = 0; i < activities.size(); i++) {
-			result.put(activities.get(i).toJSON());
-		}		
-		return result;
 	}
 	
 }
