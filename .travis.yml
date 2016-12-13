@@ -13,4 +13,4 @@ deploy:
 branches:
   only:
     - master
-    - development
+    - develop
