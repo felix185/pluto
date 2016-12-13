@@ -1,0 +1,7 @@
+lanuage: java
+install:
+  - jdk_switcher use oraclejdk8
+  - mvn -f Backend/pom.xml install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script:
+  - mv ./Database/pluto.db ./Backend/pluto.db
+  - mvn -f Backend/pom.xml test
