@@ -1,8 +1,5 @@
 language: java
-branches:
-  only:
-  - master
-  - develop
+
 install:
   - jdk_switcher use oraclejdk8
   - mvn -f Backend/pom.xml install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
@@ -16,3 +13,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+    all_branches: true
