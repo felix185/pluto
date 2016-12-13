@@ -1,7 +1,16 @@
-lanuage: java
+language: java
 install:
   - jdk_switcher use oraclejdk8
   - mvn -f Backend/pom.xml install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
   - mv ./Database/pluto.db ./Backend/pluto.db
   - mvn -f Backend/pom.xml test
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: Pluto-0.0.1-SNAPSHOT.war
+  skip_cleanup: true
+branches:
+  only:
+    - master
+    - develop
