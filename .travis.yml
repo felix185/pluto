@@ -1,0 +1,5 @@
+lanuage: java
+install: mvn -f Backend/pom.xml install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script:
+  - mv ./Database/pluto.db ./Backend/pluto.db
+  - mvn -f Backend/pom.xml test
