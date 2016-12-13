@@ -14,3 +14,5 @@ deploy:
   api_key: $GITHUB_TOKEN
   file: Pluto-0.0.1-SNAPSHOT.war
   skip_cleanup: true
+  on:
+    tags: true
