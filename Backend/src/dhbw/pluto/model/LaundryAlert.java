@@ -33,9 +33,7 @@ public class LaundryAlert extends ScheduledThreadPoolExecutor {
 		alertTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.substring(0,2)));
 		alertTime.set(Calendar.SECOND, 0);
 		alertTime.set(Calendar.MILLISECOND, 0);
-		System.out.println(alertTime.getTimeInMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(alertTime.getTimeInMillis() - System.currentTimeMillis());
+		
 		
 		long duration = alertTime.getTimeInMillis() - System.currentTimeMillis();
 	
