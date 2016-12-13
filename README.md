@@ -33,4 +33,5 @@ We use the 'develop' branch as our main branch for development. The master branc
 - Move the current Pluto.db in your Backend-Folder.
 - Open the Commandline, navigate pluto's "Backend" folder and enter the command that you can download here: https://github.com/felix185/pluto/releases/tag/v0.2 Make sure to replace the `PATH_TO_JUNIT` to the jar file that you just downloaded.
 
-
+## 5. Auto-Deployment
+The project is automatically deployed only if you push a tagged commit. That exludes merge commits that are created by GitHub.
